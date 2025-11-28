@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happiness With Mansi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Oswald', 'sans-serif'],
+                    },
+                    animation: {
+                        'marquee': 'marquee 40s linear infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-33.33%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-display { font-family: 'Oswald', sans-serif; }
+        
+        /* Hide Scrollbar */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Range Input Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body class="bg-zinc-50 dark:bg-black min-h-screen text-zinc-900 dark:text-white transition-colors duration-500 cursor-default md:cursor-none overflow-x-hidden selection:bg-pink-600 selection:text-white">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="fixed pointer-events-none z-[100] hidden md:block mix-blend-difference top-0 left-0" style="transform: translate(-50%, -50%);">
+        <div class="w-6 h-6 bg-white rounded-full blur-[2px] opacity-80"></div>
+    </div>
+
+    <!-- Scroll Progress -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-pink-600 z-[60] transition-all duration-100 ease-out" style="width: 0%"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-gradient-to-tr from-pink-600 to-red-600 rounded-lg flex items-center justify-center transform group-hover:rotate-12 transition-transform">
+                    <i data-lucide="mic" class="text-white w-6 h-6"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-zinc-900 dark:text-white font-black text-xl leading-none tracking-tight">MANSI</span>
+                    <span class="text-pink-600 dark:text-pink-500 font-bold text-xs tracking-[0.2em]">MANWANI</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center gap-8" id="desktop-links">
+                <!-- Links injected by JS -->
+            </div>
+
+            <div class="hidden md:flex items-center gap-4">
+                <button id="theme-toggle" class="p-2.5 rounded-full bg-zinc-100 dark:bg-white/10 text-zinc-900 dark:text-white hover:bg-zinc-200 dark:hover:bg-white/20 transition-colors">
+                    <i data-lucide="moon" class="w-5 h-5"></i>
+                </button>
+                <button class="bg-zinc-100 dark:bg-white/10 hover:bg-zinc-200 dark:hover:bg-white/20 text-zinc-900 dark:text-white p-2.5 rounded-full transition-colors group">
+                    <i data-lucide="search" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                </button>
+                <a href="https://www.youtube.com/@HappinessWithMansi" target="_blank" class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2.5 rounded-full font-bold text-sm transition-all hover:scale-105 shadow-lg shadow-pink-900/20 flex items-center gap-2">
+                    <i data-lucide="youtube" class="w-4 h-4"></i> Subscribe
+                </a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <div class="flex items-center gap-4 md:hidden">
+                <button id="mobile-theme-toggle" class="p-2 rounded-full bg-zinc-100 dark:bg-white/10 text-zinc-900 dark:text-white">
+                    <i data-lucide="moon" class="w-5 h-5"></i>
+                </button>
+                <button id="mobile-menu-btn" class="text-zinc-900 dark:text-white">
+                    <i data-lucide="menu" class="w-7 h-7"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden absolute top-full left-0 right-0 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 p-6 flex flex-col gap-4 shadow-2xl">
+            <!-- Mobile links injected by JS -->
+            <a href="https://www.youtube.com/@HappinessWithMansi" class="bg-pink-600 text-white w-full py-3 rounded-xl font-bold mt-4 flex items-center justify-center gap-2">
+                <i data-lucide="youtube" class="w-4 h-4"></i> Subscribe Now
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=1600&h=900&fit=crop&q=80')] bg-cover bg-center opacity-10 dark:opacity-40 transition-opacity duration-500"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-zinc-50 dark:from-black via-zinc-50/80 dark:via-black/80 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-zinc-50 dark:from-black via-transparent to-transparent"></div>
+
+        <div class="container mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8 animate-in slide-in-from-left-10 duration-1000 fade-in">
+                <div class="inline-flex items-center gap-2 bg-white/50 dark:bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-black/5 dark:border-white/10">
+                    <span class="w-2 h-2 bg-pink-500 rounded-full animate-pulse"></span>
+                    <span class="text-sm font-medium tracking-wide">Transforming Work Culture</span>
+                </div>
+
+                <h1 class="text-6xl md:text-8xl font-black leading-tight tracking-tighter">
+                    REDEFINE <br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-red-500 to-yellow-500 dark:from-pink-500 dark:via-red-500 dark:to-yellow-500">POTENTIAL</span>
+                </h1>
+
+                <p class="text-xl text-zinc-600 dark:text-zinc-300 max-w-lg leading-relaxed">
+                    Transforming workplace culture with happiness and motivation. Where every workplace thrives, and every team member smiles.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="https://www.youtube.com/@HappinessWithMansi/featured" target="_blank" class="bg-black dark:bg-white text-white dark:text-black px-8 py-4 rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all hover:scale-105">
+                        <i data-lucide="play" class="w-5 h-5 fill-current"></i> Watch Latest
+                    </a>
+                    <button class="bg-white/50 dark:bg-white/10 backdrop-blur-md text-zinc-900 dark:text-white border border-black/10 dark:border-white/20 px-8 py-4 rounded-full font-bold text-lg hover:bg-white/80 dark:hover:bg-white/20 transition-all hover:scale-105 flex items-center justify-center gap-2">
+                        <i data-lucide="headphones" class="w-5 h-5"></i> Corporate Training
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-4 pt-4">
+                    <div class="flex -space-x-3">
+                        <img src="https://i.pravatar.cc/100?img=11" class="w-10 h-10 rounded-full border-2 border-white dark:border-black bg-zinc-100 dark:bg-zinc-800 object-cover">
+                        <img src="https://i.pravatar.cc/100?img=12" class="w-10 h-10 rounded-full border-2 border-white dark:border-black bg-zinc-100 dark:bg-zinc-800 object-cover">
+                        <img src="https://i.pravatar.cc/100?img=13" class="w-10 h-10 rounded-full border-2 border-white dark:border-black bg-zinc-100 dark:bg-zinc-800 object-cover">
+                        <img src="https://i.pravatar.cc/100?img=14" class="w-10 h-10 rounded-full border-2 border-white dark:border-black bg-zinc-100 dark:bg-zinc-800 object-cover">
+                    </div>
+                    <div class="text-sm">
+                        <div class="flex text-yellow-500 mb-0.5">
+                            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                            <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                        </div>
+                        <span class="text-zinc-500 dark:text-zinc-400">Loved by 10k+ Listeners</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden lg:block relative">
+                <div class="relative z-10 transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-pink-600 to-purple-600 rounded-3xl blur-2xl opacity-40"></div>
+                    <img src="https://images.unsplash.com/photo-1589903308904-1010c2294adc?w=800&h=1000&fit=crop&q=80" alt="Mansi Manwani" class="rounded-3xl border border-white/20 dark:border-white/10 shadow-2xl w-[500px] h-[600px] object-cover mx-auto relative z-10">
+                    
+                    <div class="absolute top-10 -right-10 bg-white/80 dark:bg-black/80 backdrop-blur-xl p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-xl animate-bounce delay-100 z-20">
+                        <svg class="w-8 h-8 text-[#1DB954]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141 4.32-1.38 9.841-.719 13.44 1.5.42.3.6.84.3 1.32zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                    </div>
+                    <div class="absolute bottom-20 -left-10 bg-white/80 dark:bg-black/80 backdrop-blur-xl p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-xl flex items-center gap-3 animate-pulse z-20">
+                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <span class="font-bold text-sm text-zinc-900 dark:text-white">Recording Now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-900 transition-colors duration-500">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <div class="lg:w-1/2">
+                    <div class="relative">
+                        <div class="absolute -inset-4 bg-gradient-to-r from-pink-600 to-purple-600 rounded-2xl blur-xl opacity-30"></div>
+                        <img src="https://lh3.googleusercontent.com/p/AF1QipOLGqo9bgpgf5Ux2UiSuAwYEvbVUQP9E9fv_3sK=s1360-w1360-h1020-rw" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=800&fit=crop&q=80'" alt="Mansi Manwani" class="relative rounded-2xl w-full max-w-md mx-auto shadow-2xl border border-white/10">
+                    </div>
+                </div>
+                <div class="lg:w-1/2 space-y-6">
+                    <h2 class="text-4xl font-black text-zinc-900 dark:text-white">About the Founder</h2>
+                    <h3 class="text-2xl text-pink-600 dark:text-pink-500 font-bold">Mansi Manwani Sahajramani</h3>
+                    <p class="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed">
+                        A visionary Motivational Speaker, Corporate Trainer, and Director at Jhulelal Institute of Technology. Mansi is also a skilled Architect and Designer who believes that happy teams are the key to long-term success.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-zinc-50 dark:bg-zinc-900 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm dark:shadow-none">
+                            <h4 class="font-bold text-zinc-900 dark:text-white mb-2 flex items-center gap-2"><i data-lucide="award" class="text-yellow-500 w-4 h-4"></i> Awards</h4>
+                            <ul class="text-sm text-zinc-600 dark:text-zinc-400 space-y-1">
+                                <li>• Golden Orator Award (2008)</li>
+                                <li>• Visionary Voice Award (2011)</li>
+                                <li>• Debate Dynamo Award (2018)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-zinc-50 dark:bg-zinc-900 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm dark:shadow-none">
+                            <h4 class="font-bold text-zinc-900 dark:text-white mb-2 flex items-center gap-2"><i data-lucide="book-open" class="text-pink-500 w-4 h-4"></i> Certifications</h4>
+                            <ul class="text-sm text-zinc-600 dark:text-zinc-400 space-y-1">
+                                <li>• Happiness Program Certified</li>
+                                <li>• Personal Branding Mastery</li>
+                                <li>• Podcast Gold Membership</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Training Modules -->
+    <section id="training" class="py-20 bg-zinc-50 dark:bg-black transition-colors duration-500">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="text-pink-600 dark:text-pink-500 font-bold tracking-wider text-sm uppercase">Corporate Solutions</span>
+                <h2 class="text-4xl font-black text-zinc-900 dark:text-white mt-2">Training Modules</h2>
+                <p class="text-zinc-600 dark:text-zinc-400 mt-4 max-w-2xl mx-auto">Customized programs designed to foster resilience, nurture growth, and radiate positivity throughout your organization.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="training-grid">
+                <!-- Modules injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Episode -->
+    <section class="py-20 bg-white dark:bg-zinc-950 relative overflow-hidden border-y border-zinc-200 dark:border-zinc-900 transition-colors duration-500">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-600/5 dark:bg-pink-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-12">
+                <span class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-pink-600 dark:text-pink-500 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Now Streaming</span>
+                <h2 class="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white mt-4 font-display">Featured Episode</h2>
+            </div>
+
+            <div class="bg-zinc-50/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 md:p-10 backdrop-blur-xl shadow-2xl flex flex-col lg:flex-row gap-10 items-center max-w-6xl mx-auto">
+                <div class="w-full lg:w-1/2 relative group cursor-pointer" onclick="openVideoModal('https://www.youtube.com/embed/H6cu3ByNgyE', 'Pyare Khan - From Slums to Empire')">
+                    <div class="aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden relative shadow-2xl shadow-pink-900/20">
+                        <img src="https://img.youtube.com/vi/H6cu3ByNgyE/maxresdefault.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6 z-10 pointer-events-none">
+                            <h3 class="text-3xl md:text-5xl font-black text-white leading-none tracking-tighter drop-shadow-lg mb-4 opacity-90">SLUMS TO<br/>2000 CRORE<br/>EMPIRE</h3>
+                            <p class="text-white/90 font-medium text-xs md:text-sm bg-black/50 px-3 py-1 rounded-full backdrop-blur-md">The Pyare Khan Story</p>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center z-20">
+                            <button class="w-16 h-16 bg-white/20 backdrop-blur-md border border-white/30 rounded-full flex items-center justify-center text-white group-hover:scale-110 group-hover:bg-white group-hover:text-pink-600 transition-all shadow-xl">
+                                <i data-lucide="play" class="w-7 h-7 fill-current ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/2 space-y-8 text-center lg:text-left">
+                    <div>
+                        <span class="text-pink-600 dark:text-pink-500 font-bold tracking-wider text-sm uppercase mb-2 block">New Release</span>
+                        <h3 class="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white leading-tight mb-2">Pyare Khan</h3>
+                        <p class="text-zinc-500 dark:text-zinc-400 text-lg">Chairman, Ashmi Road Carriers | The Oxygen Man</p>
+                    </div>
+                    <p class="text-zinc-600 dark:text-zinc-300 text-lg leading-relaxed border-l-4 border-pink-600 dark:border-pink-500 pl-6 italic text-left">
+                        "From selling oranges at railway stations to building a 2000 Crore empire. A story of grit, determination, and the audacity to dream big."
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                        <button onclick="openVideoModal('https://www.youtube.com/embed/H6cu3ByNgyE', 'Pyare Khan')" class="flex-1 bg-[#FF0000] hover:bg-[#cc0000] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-red-900/20 group hover:-translate-y-1">
+                            <i data-lucide="youtube" class="w-5 h-5 fill-current"></i> Watch Now
+                        </button>
+                        <button class="flex-1 bg-[#1DB954] hover:bg-[#1ed760] text-black py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-green-900/20 group hover:-translate-y-1">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141 4.32-1.38 9.841-.719 13.44 1.5.42.3.6.84.3 1.32zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg> Listen on Spotify
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Streams -->
+    <section id="live" class="py-20 container mx-auto px-6">
+        <div class="flex items-center justify-between mb-10">
+            <div>
+                <h2 class="text-3xl font-black mb-2 flex items-center gap-3 text-zinc-900 dark:text-white">
+                    <span class="w-3 h-3 bg-red-600 rounded-full animate-ping"></span> Live & Upcoming
+                </h2>
+                <p class="text-zinc-600 dark:text-zinc-400">Don't miss the action in real-time.</p>
+            </div>
+            <a href="#" class="hidden md:flex items-center gap-2 text-pink-600 dark:text-pink-500 font-bold hover:text-zinc-900 dark:hover:text-white transition-colors">
+                View Schedule <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="live-streams">
+            <!-- Streams injected by JS -->
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="py-20 bg-zinc-100 dark:bg-zinc-900/30 border-y border-zinc-200 dark:border-zinc-800 transition-colors duration-500">
+        <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div class="text-center group p-6 rounded-2xl bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 hover:border-pink-500/50 transition-all hover:bg-zinc-50 dark:hover:bg-zinc-900 relative overflow-hidden shadow-sm dark:shadow-none">
+                <h4 class="text-4xl md:text-6xl font-black text-zinc-900 dark:text-white mb-2 counter" data-target="50">0+</h4>
+                <p class="text-zinc-500 font-bold uppercase tracking-widest text-xs">Episodes</p>
+            </div>
+            <div class="text-center group p-6 rounded-2xl bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 hover:border-pink-500/50 transition-all hover:bg-zinc-50 dark:hover:bg-zinc-900 relative overflow-hidden shadow-sm dark:shadow-none">
+                <h4 class="text-4xl md:text-6xl font-black text-zinc-900 dark:text-white mb-2 counter" data-target="120">0+</h4>
+                <p class="text-zinc-500 font-bold uppercase tracking-widest text-xs">Hours Content</p>
+            </div>
+            <div class="text-center group p-6 rounded-2xl bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 hover:border-pink-500/50 transition-all hover:bg-zinc-50 dark:hover:bg-zinc-900 relative overflow-hidden shadow-sm dark:shadow-none">
+                <h4 class="text-4xl md:text-6xl font-black text-zinc-900 dark:text-white mb-2 counter" data-target="15">0+</h4>
+                <p class="text-zinc-500 font-bold uppercase tracking-widest text-xs">Guests</p>
+            </div>
+            <div class="text-center group p-6 rounded-2xl bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 hover:border-pink-500/50 transition-all hover:bg-zinc-50 dark:hover:bg-zinc-900 relative overflow-hidden shadow-sm dark:shadow-none">
+                <h4 class="text-4xl md:text-6xl font-black text-zinc-900 dark:text-white mb-2 counter" data-target="1">0M+</h4>
+                <p class="text-zinc-500 font-bold uppercase tracking-widest text-xs">Million Impact</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Podcast List -->
+    <section id="episodes" class="py-20 bg-white dark:bg-zinc-950 border-y border-zinc-200 dark:border-zinc-900 transition-colors duration-500">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-black text-zinc-900 dark:text-white mb-4">Latest Audio Episodes</h2>
+                <p class="text-zinc-600 dark:text-zinc-400">Listen to the full conversations on your favorite platform.</p>
+            </div>
+            <div class="space-y-6 max-w-4xl mx-auto" id="podcast-list">
+                <!-- Episodes injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Gallery (Unplugged) -->
+    <section id="video-gallery" class="py-20 container mx-auto px-6 overflow-hidden">
+        <div class="flex items-center justify-between mb-10">
+            <h2 class="text-3xl font-black text-zinc-900 dark:text-white">Unplugged <span class="text-zinc-500 font-normal text-xl ml-2">Short Clips</span></h2>
+            <div class="flex gap-2">
+                <button onclick="scrollGallery('left')" class="w-10 h-10 rounded-full border border-zinc-200 dark:border-zinc-700 flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-white text-zinc-900 dark:text-white hover:text-black transition-colors"><i data-lucide="skip-back" class="w-4 h-4"></i></button>
+                <button onclick="scrollGallery('right')" class="w-10 h-10 rounded-full border border-zinc-200 dark:border-zinc-700 flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-white text-zinc-900 dark:text-white hover:text-black transition-colors"><i data-lucide="skip-forward" class="w-4 h-4"></i></button>
+            </div>
+        </div>
+        <div id="gallery-container" class="flex gap-6 overflow-x-auto pb-6 scrollbar-hide snap-x scroll-smooth">
+            <!-- Clips injected by JS -->
+        </div>
+    </section>
+
+    <!-- Clients Marquee -->
+    <section class="py-16 bg-zinc-50 dark:bg-white text-black overflow-hidden relative">
+        <div class="absolute left-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-r from-zinc-50 dark:from-white to-transparent z-10"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-l from-zinc-50 dark:from-white to-transparent z-10"></div>
+        <div class="container mx-auto px-6 text-center mb-10 relative z-20">
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-zinc-500">Trusted by Leading Organizations</p>
+        </div>
+        <div class="flex w-max animate-marquee gap-16 items-center hover:[animation-play-state:paused]" id="marquee-content">
+            <!-- Logos injected by JS -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-zinc-100 dark:bg-black pt-20 pb-10 border-t border-zinc-200 dark:border-zinc-900 transition-colors duration-500">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+                <div class="space-y-6">
+                    <div class="flex flex-col">
+                        <span class="text-zinc-900 dark:text-white font-black text-2xl">MANSI</span>
+                        <span class="text-pink-600 dark:text-pink-500 font-bold text-sm tracking-[0.2em]">MANWANI</span>
+                    </div>
+                    <p class="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">
+                        Empowering individuals and organizations through conversations that matter. Join the movement towards happiness and success.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-900 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:bg-pink-600 hover:text-white transition-all transform hover:-translate-y-1"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-900 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:bg-pink-600 hover:text-white transition-all transform hover:-translate-y-1"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-900 flex items-center justify-center text-zinc-500 dark:text-zinc-400 hover:bg-pink-600 hover:text-white transition-all transform hover:-translate-y-1"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold text-zinc-900 dark:text-white mb-6">Quick Links</h4>
+                    <ul class="space-y-4 text-sm text-zinc-600 dark:text-zinc-400">
+                        <li><a href="#home" class="hover:text-pink-500 transition-colors">Home</a></li>
+                        <li><a href="#about" class="hover:text-pink-500 transition-colors">About</a></li>
+                        <li><a href="#episodes" class="hover:text-pink-500 transition-colors">Episodes</a></li>
+                        <li><a href="#training" class="hover:text-pink-500 transition-colors">Training</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-zinc-900 dark:text-white mb-6">Contact</h4>
+                    <ul class="space-y-4 text-sm text-zinc-600 dark:text-zinc-400">
+                        <li class="flex items-center gap-3"><i data-lucide="mail" class="w-4 h-4 text-pink-500"></i> happiness@mansi.com</li>
+                        <li class="flex items-center gap-3"><i data-lucide="phone" class="w-4 h-4 text-pink-500"></i> +91 70834 38236</li>
+                        <li class="flex items-center gap-3"><i data-lucide="map-pin" class="w-4 h-4 text-pink-500"></i> Nagpur, India</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-zinc-900 dark:text-white mb-6">Newsletter</h4>
+                    <div class="flex gap-2">
+                        <input type="email" placeholder="Your email" class="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-lg px-4 py-2 text-sm text-zinc-900 dark:text-white focus:outline-none focus:border-pink-500 w-full transition-colors" />
+                        <button class="bg-pink-600 hover:bg-pink-700 text-white p-2 rounded-lg transition-colors"><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-zinc-200 dark:border-zinc-900 pt-8 flex justify-between text-xs text-zinc-500">
+                <p>&copy; 2024 Happiness With Mansi.</p>
+                <div class="flex gap-6"><a href="#">Privacy Policy</a><a href="#">Terms</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Live Notification -->
+    <div id="live-notification" class="fixed bottom-24 md:bottom-6 left-1/2 -translate-x-1/2 z-[55] w-[95%] max-w-xl transition-all duration-700 transform translate-y-20 opacity-0">
+        <div class="bg-[#1a0508] border border-red-900/50 rounded-2xl p-3 md:p-4 shadow-[0_0_50px_-10px_rgba(220,38,38,0.5)] flex items-center justify-between gap-4 backdrop-blur-xl">
+            <div class="flex items-center gap-4 flex-1 min-w-0">
+                <div class="relative flex items-center justify-center w-12 h-12 rounded-full bg-red-600/10 shrink-0">
+                    <div class="absolute w-full h-full bg-red-600/20 rounded-full animate-ping"></div>
+                    <i data-lucide="radio" class="text-red-500 w-5 h-5 relative z-10"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-1">
+                        <h3 class="text-white font-bold text-sm md:text-base truncate">Live Broadcast</h3>
+                        <span class="bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded animate-pulse">ON AIR</span>
+                    </div>
+                    <p class="text-zinc-400 text-xs truncate">Coping with Stress w/ Dr. Singal</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="#live" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 transition-all whitespace-nowrap">
+                    <i data-lucide="play" class="w-3 h-3 fill-current"></i> Watch
+                </a>
+                <button onclick="document.getElementById('live-notification').classList.add('hidden')" class="p-2 text-zinc-500 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="fixed inset-0 z-[60] bg-black/95 backdrop-blur-xl hidden items-center justify-center p-4">
+        <button onclick="closeVideoModal()" class="absolute top-6 right-6 text-white/50 hover:text-pink-500 transition-colors z-50 p-2 hover:bg-white/10 rounded-full">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+        
+        <div class="w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl shadow-pink-900/20 border border-zinc-800 relative group">
+            <div id="youtube-player" class="w-full h-full"></div>
+            
+            <!-- Controls -->
+            <div id="player-controls" class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col gap-3">
+                
+                <!-- Progress Bar -->
+                <div class="relative w-full h-1.5 group/scrubber flex items-center cursor-pointer mb-2" id="progress-container">
+                    <div class="absolute w-full h-1 bg-white/20 rounded-full"></div>
+                    <div id="buffered-bar" class="absolute h-1 bg-white/40 rounded-full transition-all" style="width: 0%"></div>
+                    <div id="progress-bar" class="absolute h-1 bg-red-600 rounded-full transition-all" style="width: 0%"></div>
+                    <div id="scrubber-thumb" class="absolute h-3 w-3 bg-red-600 rounded-full shadow-md transform scale-0 group-hover/scrubber:scale-100 transition-transform" style="left: 0%; margin-left: -6px;"></div>
+                    <input type="range" id="seek-slider" min="0" max="100" step="0.1" value="0" class="absolute w-full h-full opacity-0 cursor-pointer z-10">
+                    <!-- Tooltip -->
+                    <div id="scrub-tooltip" class="absolute bottom-4 -translate-x-1/2 bg-white text-black text-[10px] font-bold px-1.5 py-0.5 rounded shadow-lg z-20 pointer-events-none hidden">0:00</div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <button id="play-pause-btn" class="text-white hover:text-red-500 transition-colors"><i data-lucide="pause" class="w-6 h-6 fill-current"></i></button>
+                        
+                        <!-- Volume -->
+                        <div class="flex items-center gap-2 group/vol relative">
+                            <button id="mute-btn" class="text-white hover:text-red-500 w-6"><i data-lucide="volume-2" class="w-5 h-5"></i></button>
+                            <div class="w-0 overflow-hidden group-hover/vol:w-24 transition-all duration-300 ease-out flex items-center">
+                                <input type="range" id="volume-slider" min="0" max="100" value="100" class="w-20 h-1 bg-white/30 rounded-full appearance-none cursor-pointer accent-white hover:accent-red-500">
+                            </div>
+                        </div>
+
+                        <span class="text-xs font-medium font-mono text-white/90 bg-black/30 px-2 py-1 rounded select-none">
+                            <span id="current-time">0:00</span> <span class="text-white/50">/</span> <span id="duration">0:00</span>
+                        </span>
+
+                        <button id="speed-btn" class="text-xs font-bold text-white hover:text-red-500 transition-colors w-8 text-right">1x</button>
+                    </div>
+                    <div id="video-title" class="text-white font-bold text-sm truncate max-w-[200px]"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- DATA ---
+        const NAV_LINKS = [
+            { name: 'Home', href: '#home' },
+            { name: 'About', href: '#about' },
+            { name: 'Episodes', href: '#episodes' },
+            { name: 'Training', href: '#training' },
+            { name: 'Live', href: '#live' },
+            { name: 'Contact', href: '#contact' },
+        ];
+
+        const LIVE_STREAMS = [
+            { id: 'live-1', title: "Special: Coping with Stress", guest: "Dr. Ravinder Singal", viewers: "1.2K", thumbnail: "https://img.youtube.com/vi/ps0nF7R1ems/maxresdefault.jpg", embedUrl: "https://www.youtube.com/embed/ps0nF7R1ems" },
+            { id: 'live-2', title: "Q&A: Entrepreneurship 101", guest: "Mr. Vishal Agrawal", viewers: "856", thumbnail: "https://img.youtube.com/vi/Q14u3bDQZsU/maxresdefault.jpg", embedUrl: "https://www.youtube.com/embed/Q14u3bDQZsU" },
+            { id: 'live-3', title: "Behind the Scenes: Studio Tour", guest: "Mansi Manwani", viewers: "2.4K", thumbnail: "https://img.youtube.com/vi/XmX-_tgtSUM/maxresdefault.jpg", embedUrl: "https://www.youtube.com/embed/XmX-_tgtSUM" }
+        ];
+
+        const GUESTS = [
+            { id: "H6cu3ByNgyE", name: "Pyare Khan", role: "Chairman, Ashmi Road Carriers", topic: "From Slums to 2000 Crore Empire", category: "Business", duration: "1:18:14", image: "https://img.youtube.com/vi/H6cu3ByNgyE/maxresdefault.jpg", videoUrl: "https://www.youtube.com/embed/H6cu3ByNgyE", description: "A powerful conversation about leadership, resilience, and the human side of enforcing law." },
+            { id: "ps0nF7R1ems", name: "Dr. Ravinder Singal", role: "Police Commissioner, Nagpur", topic: "Leadership, Law & Humanity", category: "Leadership", duration: "55:11", image: "https://img.youtube.com/vi/ps0nF7R1ems/maxresdefault.jpg", videoUrl: "https://www.youtube.com/embed/ps0nF7R1ems", description: "An in-depth look into the life of a top cop. Dr. Singal discusses the challenges of maintaining law and order." },
+            { id: "Q14u3bDQZsU", name: "Mr. Vishal Agrawal", role: "MD, RC Plasto", topic: "Building an Industrial Empire", category: "Business", duration: "55:30", image: "https://img.youtube.com/vi/Q14u3bDQZsU/maxresdefault.jpg", videoUrl: "https://www.youtube.com/embed/Q14u3bDQZsU", description: "Vishal Agrawal shares his journey of building RC Plasto into a household name." },
+            { id: "qrkEjTW8YHQ", name: "Jay Sahajramani", role: "Real Estate Developer", topic: "Want to Be Rich? Start with Real Estate", category: "Business", duration: "40:06", image: "https://img.youtube.com/vi/qrkEjTW8YHQ/maxresdefault.jpg", videoUrl: "https://www.youtube.com/embed/qrkEjTW8YHQ", description: "Unlocking the secrets of real estate wealth." }
+        ];
+
+        const TRAINING_MODULES = [
+            { title: "Peak Performance Strategy", desc: "Techniques to achieve consistency and high output.", icon: "award" },
+            { title: "Happiness at Work", desc: "Cultivating a positive mindset for enhanced productivity.", icon: "smile" },
+            { title: "Motivation Unlocked", desc: "Reignite motivation and overcome procrastination.", icon: "zap" },
+            { title: "Stress to Strength", desc: "Building mental resilience and preventing burnout.", icon: "heart" },
+            { title: "Speak with Confidence", desc: "Mastering Public Speaking for impact.", icon: "mic" },
+            { title: "Emotional Intelligence", desc: "Develop self-awareness and emotional control.", icon: "brain" }
+        ];
+
+        const UNPLUGGED_CLIPS = [
+            { title: "Guess the Guest! Ep 8", views: "1.2K", image: "https://img.youtube.com/vi/0iUTRnSTlc8/maxresdefault.jpg", videoUrl: "https://www.youtube.com/embed/0iUTRnSTlc8" },
+            { title: "Busting Drug Lords", views: "650", image: "https://img.youtube.com/vi/NIkdWaVdKcU/maxresdefault.jpg", videoUrl: "https://www.youtube.com/embed/NIkdWaVdKcU" },
+            { title: "Entrepreneurship 101", views: "850", image: "https://img.youtube.com/vi/Q14u3bDQZsU/maxresdefault.jpg", videoUrl: "https://www.youtube.com/embed/Q14u3bDQZsU" },
+            { title: "Studio Tour", views: "2.4K", image: "https://img.youtube.com/vi/XmX-_tgtSUM/maxresdefault.jpg", videoUrl: "https://www.youtube.com/embed/XmX-_tgtSUM" },
+            { title: "Luxury Brands Truth", views: "2.1K", image: "https://img.youtube.com/vi/__Ogy16mfi8/maxresdefault.jpg", videoUrl: "https://www.youtube.com/embed/__Ogy16mfi8" },
+            { title: "Real Estate Secrets", views: "5.7K", image: "https://img.youtube.com/vi/qrkEjTW8YHQ/maxresdefault.jpg", videoUrl: "https://www.youtube.com/embed/qrkEjTW8YHQ" }
+        ];
+
+        const CLIENT_LOGOS = [
+            { name: "RC PLASTO", url: "https://placehold.co/200x80/ffffff/000000?text=RC+PLASTO&font=oswald" },
+            { name: "Jayshree Pipes", url: "https://placehold.co/200x80/ffffff/000000?text=Jayshree+Pipes&font=oswald" },
+            { name: "Priyadarshini", url: "https://placehold.co/200x80/ffffff/000000?text=Priyadarshini&font=oswald" },
+            { name: "S.B. Jain", url: "https://placehold.co/200x80/ffffff/000000?text=SB+JAIN&font=oswald" },
+            { name: "Saini Electricals", url: "https://placehold.co/200x80/ffffff/000000?text=Saini+Elc.&font=oswald" },
+            { name: "BlissTech", url: "https://placehold.co/200x80/ffffff/000000?text=BlissTech&font=oswald" }
+        ];
+
+        // --- RENDER FUNCTIONS ---
+        
+        function renderNav() {
+            const container = document.getElementById('desktop-links');
+            container.innerHTML = NAV_LINKS.map(link => `
+                <a href="${link.href}" class="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-pink-600 dark:hover:text-pink-500 transition-all duration-300 ease-out uppercase tracking-widest transform hover:scale-110">
+                    ${link.name}
+                </a>
+            `).join('');
+
+            const mobileContainer = document.getElementById('mobile-menu');
+            const linksHtml = NAV_LINKS.map(link => `
+                <a href="${link.href}" onclick="toggleMobileMenu()" class="text-lg font-bold text-zinc-900 dark:text-white py-2 border-b border-zinc-100 dark:border-white/5">
+                    ${link.name}
+                </a>
+            `).join('');
+            mobileContainer.insertAdjacentHTML('afterbegin', linksHtml);
+        }
+
+        function renderTraining() {
+            const container = document.getElementById('training-grid');
+            container.innerHTML = TRAINING_MODULES.map(m => `
+                <div class="bg-white dark:bg-zinc-900/50 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 hover:border-pink-500/50 transition-all hover:bg-zinc-50 dark:hover:bg-zinc-900 group shadow-sm dark:shadow-none">
+                    <div class="w-12 h-12 bg-zinc-100 dark:bg-zinc-800 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="${m.icon}" class="w-6 h-6 text-pink-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-2">${m.title}</h3>
+                    <p class="text-zinc-600 dark:text-zinc-400 text-sm">${m.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderLive() {
+            const container = document.getElementById('live-streams');
+            container.innerHTML = LIVE_STREAMS.map(s => `
+                <div class="group relative rounded-2xl overflow-hidden bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 transition-all shadow-lg dark:shadow-none">
+                    <div class="aspect-video relative overflow-hidden">
+                        <img src="${s.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onclick="openVideoModal('${s.embedUrl}', '${s.title}')" class="bg-red-600 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform">
+                                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+                            </button>
+                        </div>
+                        <div class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded uppercase">Live</div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg mb-1 line-clamp-1 text-zinc-900 dark:text-white">${s.title}</h3>
+                        <p class="text-zinc-600 dark:text-zinc-400 text-sm">ft. <span class="text-zinc-900 dark:text-white">${s.guest}</span></p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPodcastList() {
+            const container = document.getElementById('podcast-list');
+            container.innerHTML = GUESTS.map(ep => `
+                <div class="bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 sm:p-6 flex flex-col md:flex-row gap-6 hover:border-pink-500/30 transition-all group shadow-sm dark:shadow-none">
+                    <div class="w-full md:w-48 shrink-0 relative overflow-hidden rounded-xl aspect-video md:aspect-square">
+                        <img src="${ep.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="flex-1 flex flex-col justify-center">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-pink-100 dark:bg-pink-600/10 text-pink-600 dark:text-pink-500 border border-pink-200 dark:border-pink-500/20 text-[10px] font-bold px-2 py-0.5 rounded uppercase">${ep.category}</span>
+                            <span class="text-zinc-500 text-xs font-mono flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> ${ep.duration}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-1 group-hover:text-pink-600 dark:group-hover:text-pink-500 transition-colors">${ep.topic}</h3>
+                        <p class="text-zinc-700 dark:text-zinc-300 text-sm font-medium mb-2">ft. ${ep.name}</p>
+                        <p class="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed mb-6 line-clamp-2">${ep.description}</p>
+                        <div class="flex flex-wrap gap-3 mt-auto">
+                            <button onclick="openVideoModal('${ep.videoUrl}', '${ep.topic}')" class="bg-zinc-200 dark:bg-white/10 hover:bg-zinc-300 dark:hover:bg-white/20 border border-zinc-300 dark:border-white/10 text-zinc-900 dark:text-white px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 transition-all">
+                                <i data-lucide="youtube" class="w-4 h-4 text-red-500 fill-current"></i> Watch Video
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderGallery() {
+            const container = document.getElementById('gallery-container');
+            container.innerHTML = UNPLUGGED_CLIPS.map(clip => `
+                <div class="min-w-[280px] md:min-w-[320px] aspect-[9/16] relative rounded-2xl overflow-hidden group cursor-pointer border border-zinc-200 dark:border-zinc-800 hover:border-pink-500 transition-colors snap-center shrink-0 bg-white dark:bg-zinc-900" onclick="openVideoModal('${clip.videoUrl}', '${clip.title}')">
+                    <img src="${clip.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/90"></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center transform group-hover:scale-110 transition-transform">
+                            <i data-lucide="play" class="w-8 h-8 text-white fill-current"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-4 left-4 right-4">
+                        <h3 class="font-bold text-white text-lg leading-tight mb-1">${clip.title}</h3>
+                        <p class="text-zinc-400 text-xs flex items-center gap-1 font-mono"><i data-lucide="play" class="w-3 h-3 fill-current"></i> ${clip.views}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderMarquee() {
+            const container = document.getElementById('marquee-content');
+            // Duplicate list 3 times for smooth loop
+            const list = [...CLIENT_LOGOS, ...CLIENT_LOGOS, ...CLIENT_LOGOS];
+            container.innerHTML = list.map(c => `
+                <div class="h-16 md:h-20 w-40 md:w-48 flex items-center justify-center grayscale hover:grayscale-0 opacity-40 hover:opacity-100 transition-all duration-300 cursor-pointer">
+                    <img src="${c.url}" alt="${c.name}" class="max-h-full max-w-full object-contain">
+                </div>
+            `).join('');
+        }
+
+        // --- INTERACTION LOGIC ---
+
+        // Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+        document.getElementById('mobile-menu-btn').onclick = toggleMobileMenu;
+
+        // Theme Toggle
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+        document.getElementById('theme-toggle').onclick = toggleTheme;
+        document.getElementById('mobile-theme-toggle').onclick = toggleTheme;
+
+        // Check LocalStorage
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // Scroll Progress & Navbar Style
+        window.addEventListener('scroll', () => {
+            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (window.scrollY / totalHeight) * 100;
+            document.getElementById('scroll-progress').style.width = `${progress}%`;
+
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-white/80', 'dark:bg-black/80', 'backdrop-blur-xl', 'border-b', 'border-black/5', 'dark:border-white/10', 'py-4');
+                navbar.classList.remove('py-6');
+            } else {
+                navbar.classList.remove('bg-white/80', 'dark:bg-black/80', 'backdrop-blur-xl', 'border-b', 'border-black/5', 'dark:border-white/10', 'py-4');
+                navbar.classList.add('py-6');
+            }
+        });
+
+        // Custom Cursor
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.getElementById('custom-cursor');
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            const target = e.target;
+            if (target.tagName === 'BUTTON' || target.tagName === 'A' || target.closest('button') || target.closest('a') || target.classList.contains('cursor-pointer')) {
+                cursor.style.transform = 'translate(-50%, -50%) scale(2.5)';
+            } else {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+            }
+        });
+
+        // Horizontal Scroll
+        function scrollGallery(direction) {
+            const container = document.getElementById('gallery-container');
+            const scrollAmount = direction === 'left' ? -350 : 350;
+            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+
+        // Counters (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target.querySelector('.counter');
+                    const target = +counter.getAttribute('data-target');
+                    let count = 0;
+                    const increment = target / 50; // Speed
+                    
+                    const updateCount = () => {
+                        if (count < target) {
+                            count += increment;
+                            counter.innerText = Math.ceil(count) + (target === 1 ? 'M+' : '+');
+                            requestAnimationFrame(updateCount);
+                        } else {
+                            counter.innerText = target + (target === 1 ? 'M+' : '+');
+                        }
+                    };
+                    updateCount();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        // --- YOUTUBE PLAYER & MODAL ---
+        
+        let player;
+        let playerInterval;
+        let isDragging = false;
+
+        function onYouTubeIframeAPIReady() {
+            // Player will be initialized when modal opens
+        }
+
+        // Load YouTube API
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function openVideoModal(url, title) {
+            const videoId = url.match(/embed\/([^?]+)/)[1];
+            document.getElementById('video-modal').classList.remove('hidden');
+            document.getElementById('video-modal').classList.add('flex');
+            document.getElementById('video-title').innerText = title;
+
+            if (player) {
+                player.loadVideoById(videoId);
+            } else {
+                player = new YT.Player('youtube-player', {
+                    height: '100%',
+                    width: '100%',
+                    videoId: videoId,
+                    playerVars: { 'autoplay': 1, 'controls': 0, 'modestbranding': 1, 'rel': 0 },
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+            }
+        }
+
+        function closeVideoModal() {
+            document.getElementById('video-modal').classList.add('hidden');
+            document.getElementById('video-modal').classList.remove('flex');
+            if (player) player.stopVideo();
+            clearInterval(playerInterval);
+        }
+
+        function onPlayerReady(event) {
+            playerInterval = setInterval(updateProgressBar, 500);
+            updateVolumeIcon(player.getVolume());
+        }
+
+        function onPlayerStateChange(event) {
+            const btn = document.getElementById('play-pause-btn');
+            if (event.data == YT.PlayerState.PLAYING) {
+                btn.innerHTML = '<i data-lucide="pause" class="w-6 h-6 fill-current"></i>';
+                lucide.createIcons();
+            } else {
+                btn.innerHTML = '<i data-lucide="play" class="w-6 h-6 fill-current"></i>';
+                lucide.createIcons();
+            }
+        }
+
+        function updateProgressBar() {
+            if (!player || !player.getCurrentTime || isDragging) return;
+            const duration = player.getDuration();
+            const currentTime = player.getCurrentTime();
+            const buffered = player.getVideoLoadedFraction();
+            
+            if (duration > 0) {
+                const pct = (currentTime / duration) * 100;
+                document.getElementById('progress-bar').style.width = `${pct}%`;
+                document.getElementById('scrubber-thumb').style.left = `${pct}%`;
+                document.getElementById('buffered-bar').style.width = `${buffered * 100}%`;
+                document.getElementById('seek-slider').value = pct;
+                
+                document.getElementById('current-time').innerText = formatTime(currentTime);
+                document.getElementById('duration').innerText = formatTime(duration);
+            }
+        }
+
+        // Controls Logic
+        document.getElementById('play-pause-btn').onclick = () => {
+            const state = player.getPlayerState();
+            if (state === 1) player.pauseVideo();
+            else player.playVideo();
+        };
+
+        const seekSlider = document.getElementById('seek-slider');
+        seekSlider.addEventListener('input', (e) => {
+            isDragging = true;
+            const pct = e.target.value;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+            document.getElementById('scrubber-thumb').style.left = `${pct}%`;
+        });
+        seekSlider.addEventListener('change', (e) => {
+            isDragging = false;
+            const duration = player.getDuration();
+            const seekTo = duration * (e.target.value / 100);
+            player.seekTo(seekTo, true);
+        });
+
+        // Tooltip Scrubbing
+        document.getElementById('progress-container').addEventListener('mousemove', (e) => {
+            if (!player || !player.getDuration) return;
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const pct = Math.max(0, Math.min(100, (x / rect.width) * 100));
+            const time = (pct / 100) * player.getDuration();
+            const tooltip = document.getElementById('scrub-tooltip');
+            
+            tooltip.style.left = `${pct}%`;
+            tooltip.innerText = formatTime(time);
+            tooltip.classList.remove('hidden');
+        });
+        document.getElementById('progress-container').addEventListener('mouseleave', () => {
+            document.getElementById('scrub-tooltip').classList.add('hidden');
+        });
+
+        // Volume
+        const volSlider = document.getElementById('volume-slider');
+        volSlider.addEventListener('input', (e) => {
+            player.setVolume(e.target.value);
+            if(player.isMuted()) player.unMute();
+            updateVolumeIcon(e.target.value);
+        });
+
+        document.getElementById('mute-btn').onclick = () => {
+            if (player.isMuted()) {
+                player.unMute();
+                updateVolumeIcon(player.getVolume());
+                volSlider.value = player.getVolume();
+            } else {
+                player.mute();
+                updateVolumeIcon(0);
+                volSlider.value = 0;
+            }
+        };
+
+        function updateVolumeIcon(vol) {
+            const icon = document.querySelector('#mute-btn i');
+            // Simply re-rendering icon for simplicity
+            if (vol == 0) icon.setAttribute('data-lucide', 'volume-x');
+            else if (vol < 50) icon.setAttribute('data-lucide', 'volume-1');
+            else icon.setAttribute('data-lucide', 'volume-2');
+            lucide.createIcons();
+        }
+
+        // Speed
+        let speeds = [1, 1.5, 2, 0.5];
+        let speedIdx = 0;
+        document.getElementById('speed-btn').onclick = (e) => {
+            speedIdx = (speedIdx + 1) % speeds.length;
+            const rate = speeds[speedIdx];
+            player.setPlaybackRate(rate);
+            e.target.innerText = rate + 'x';
+        };
+
+        function formatTime(s) {
+            const mins = Math.floor(s / 60);
+            const secs = Math.floor(s % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Live Notification Timeout
+        setTimeout(() => {
+            document.getElementById('live-notification').classList.remove('translate-y-20', 'opacity-0');
+        }, 3000);
+
+        // Initial Render
+        renderNav();
+        renderTraining();
+        renderLive();
+        renderPodcastList();
+        renderGallery();
+        renderMarquee();
+        
+        // Init Icons
+        lucide.createIcons();
+
+        // Init Observers
+        document.querySelectorAll('.group').forEach(el => {
+            if (el.querySelector('.counter')) observer.observe(el);
+        });
+
+    </script>
+</body>
+</html>
